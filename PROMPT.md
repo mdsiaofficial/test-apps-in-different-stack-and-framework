@@ -25,6 +25,8 @@ Node26 - nestjs
 
 Node26 - expressjs
 
+Bun1.4.4 - bunjs
+
 Bun1.4.4 - honojs
 
 Bun1.4.4 - elysiajs
@@ -37,7 +39,7 @@ Python3.15 - django
 
 ## Implementation map
 
-All 15 apps are implemented. They share one PostgreSQL database (see
+All 16 apps are implemented. They share one PostgreSQL database (see
 `docker-compose.yml` + `db/init.sql`) and expose the same 20 routes
 documented in `ROUTES.md`.
 
@@ -60,10 +62,11 @@ docker compose up -d
 | 9 | `node-fastify` | Node 26 + Fastify | 8009 | `cd node-fastify && npm install && npm start` |
 | 10 | `node-nestjs` | Node 26 + NestJS | 8010 | `cd node-nestjs && npm install && npm run build && npm start` |
 | 11 | `node-expressjs` | Node 26 + Express | 8011 | `cd node-expressjs && npm install && npm start` |
-| 12 | `bun-honojs` | Bun 1.4.4 + Hono | 8012 | `cd bun-honojs && bun install && bun start` |
-| 13 | `bun-elysiajs` | Bun 1.4.4 + Elysia | 8013 | `cd bun-elysiajs && bun install && bun start` |
-| 14 | `python-fastapi` | Python 3.15 + FastAPI | 8014 | `cd python-fastapi && python -m pip install -r requirements.txt && python -m app.main` |
-| 15 | `python-django` | Python 3.15 + Django | 8015 | `cd python-django && python -m pip install -r requirements.txt && ./run.sh` |
+| 12 | `bun-bunjs` | Bun 1.4.4 raw `Bun.serve` + `Bun.SQL` (TS) | 8012 | `cd bun-bunjs && bun run src/server.ts` |
+| 13 | `bun-honojs` | Bun 1.4.4 + Hono | 8013 | `cd bun-honojs && bun install && bun start` |
+| 14 | `bun-elysiajs` | Bun 1.4.4 + Elysia | 8014 | `cd bun-elysiajs && bun install && bun start` |
+| 15 | `python-fastapi` | Python 3.15 + FastAPI | 8015 | `cd python-fastapi && python -m pip install -r requirements.txt && python -m app.main` |
+| 16 | `python-django` | Python 3.15 + Django | 8016 | `cd python-django && python -m pip install -r requirements.txt && ./run.sh` |
 
 Every app reads `DATABASE_URL` (default
 `postgres://app:app@localhost:5432/appdb`) and `PORT`.

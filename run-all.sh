@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Start the shared Postgres container and all 15 apps.
+# Start the shared Postgres container and all 16 apps.
 # Each app logs to .run/logs/<app>.log. Press Ctrl+C to stop everything.
 set -euo pipefail
 set -m
@@ -8,7 +8,7 @@ cd "$(dirname "$0")"
 RUN_DIR=".run"
 LOG_DIR="$RUN_DIR/logs"
 PID_FILE="$RUN_DIR/pids"
-PORTS=(8001 8002 8003 8004 8005 8006 8007 8008 8009 8010 8011 8012 8013 8014 8015)
+PORTS=(8001 8002 8003 8004 8005 8006 8007 8008 8009 8010 8011 8012 8013 8014 8015 8016)
 
 mkdir -p "$LOG_DIR"
 : >"$PID_FILE"
@@ -60,10 +60,11 @@ start nodejs     8008 node-nodejs     node src/server.js
 start fastify    8009 node-fastify    node src/server.js
 start nestjs     8010 node-nestjs     node dist/main.js
 start expressjs  8011 node-expressjs  node src/server.js
-start hono       8012 bun-honojs      bun run src/index.ts
-start elysia     8013 bun-elysiajs    bun run src/index.ts
-start fastapi    8014 python-fastapi  python -m app.main
-start django     8015 python-django   ./run.sh
+start bunjs      8012 bun-bunjs       bun run src/server.ts
+start hono       8013 bun-honojs      bun run src/index.ts
+start elysia     8014 bun-elysiajs    bun run src/index.ts
+start fastapi    8015 python-fastapi  python -m app.main
+start django     8016 python-django   ./run.sh
 
 stop_all() {
   echo

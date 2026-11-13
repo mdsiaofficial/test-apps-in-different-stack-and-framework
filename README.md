@@ -1,6 +1,6 @@
 # Running the applications
 
-This repo contains 15 backend apps sharing one PostgreSQL database. Each app
+This repo contains 16 backend apps sharing one PostgreSQL database. Each app
 implements the same 20 endpoints (see `ROUTES.md`) and listens on its own port.
 
 | App | Folder | Port |
@@ -16,10 +16,11 @@ implements the same 20 endpoints (see `ROUTES.md`) and listens on its own port.
 | Node + Fastify | `node-fastify` | 8009 |
 | Node + NestJS | `node-nestjs` | 8010 |
 | Node + Express | `node-expressjs` | 8011 |
-| Bun + Hono | `bun-honojs` | 8012 |
-| Bun + Elysia | `bun-elysiajs` | 8013 |
-| Python + FastAPI | `python-fastapi` | 8014 |
-| Python + Django | `python-django` | 8015 |
+| Bun + raw `Bun.serve` (TS) | `bun-bunjs` | 8012 |
+| Bun + Hono | `bun-honojs` | 8013 |
+| Bun + Elysia | `bun-elysiajs` | 8014 |
+| Python + FastAPI | `python-fastapi` | 8015 |
+| Python + Django | `python-django` | 8016 |
 
 Every app reads `DATABASE_URL` (default
 `postgres://app:app@localhost:5432/appdb`) and `PORT` (defaults above).
@@ -74,6 +75,7 @@ docker compose up -d
 (cd node-expressjs && npm install)
 
 # Bun
+(cd bun-bunjs    && bun install)
 (cd bun-honojs   && bun install)
 (cd bun-elysiajs && bun install)
 
@@ -95,9 +97,9 @@ chmod +x run-all.sh stop-all.sh   # once
 
 The script:
 
-1. checks that ports 8001–8015 are free,
+1. checks that ports 8001–8016 are free,
 2. starts Postgres with `docker compose up -d` and waits for readiness,
-3. starts all 15 apps in the background,
+3. starts all 16 apps in the background,
 4. streams nothing to the terminal — each app logs to `.run/logs/<app>.log`.
 
 Press **Ctrl+C** in that terminal to stop all apps. You can also stop them from
@@ -147,12 +149,13 @@ app (or `nohup`/tmux).
 (cd node-expressjs && npm start)          # 8011
 
 # Bun
-(cd bun-honojs   && bun start)            # 8012
-(cd bun-elysiajs && bun start)            # 8013
+(cd bun-bunjs    && bun run src/server.ts) # 8012 (TypeScript runs natively — no build)
+(cd bun-honojs   && bun start)            # 8013
+(cd bun-elysiajs && bun start)            # 8014
 
 # Python (use `python`, not `python3`)
-(cd python-fastapi && python -m app.main) # 8014
-(cd python-django  && ./run.sh)           # 8015
+(cd python-fastapi && python -m app.main) # 8015
+(cd python-django  && ./run.sh)           # 8016
 ```
 
 To run an app on a different port, override `PORT`:
@@ -187,7 +190,7 @@ curl http://localhost:8001/api/stats/summary
 All ports at once:
 
 ```bash
-for p in $(seq 8001 8015); do
+for p in $(seq 8001 8016); do
   printf '%s: ' "$p"
   curl -s --max-time 2 "http://localhost:$p/health" || echo "not running"
   echo
@@ -219,6 +222,7 @@ docker compose down    # Postgres (keeps data)
 | `ECONNREFUSED 127.0.0.1:5432` | Postgres is not up: `docker compose up -d` and wait for `healthy`. |
 | Python `ModuleNotFoundError` | Install with `python -m pip install -r requirements.txt` inside that app folder. |
 | `python3` is not the right version | Use `python` (3.15) as shown above — `python3` is 3.8 on this machine. |
+| `bun: command not found` | Bun isn't installed or not on `PATH`: `curl -fsSL https://bun.sh/install | bash`, then restart your terminal. Needed for `bun-honojs`, `bun-elysiajs`, `bun-bunjs`. |
 | `./run.sh: Permission denied` | `chmod +x python-django/run.sh`. |
 | Spring Boot / Rust take long on first start | Normal — they compile first. Watch `.run/logs/<app>.log`. |
 | Empty lists after a fresh DB | Ensure the volume was initialised with `db/init.sql`; reset with `docker compose down -v && docker compose up -d`. |

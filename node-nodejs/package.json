@@ -1,0 +1,13 @@
+{
+  "name": "node-nodejs",
+  "version": "1.0.0",
+  "description": "Plain Node.js backend for shared API contract",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}
