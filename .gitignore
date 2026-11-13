@@ -1,0 +1,20 @@
+# dependencies
+node_modules/
+.venv/
+venv/
+
+# build output
+target/
+dist/
+bin/
+obj/
+__pycache__/
+*.pyc
+
+# logs / local env
+*.log
+.env
+.env.*
+
+# run-all.sh state
+.run/
